@@ -30,8 +30,8 @@ class CodingProfilesSection extends StatelessWidget {
               final cardWidth = constraints.maxWidth >= 980
                   ? (constraints.maxWidth - 32) / 3
                   : constraints.maxWidth >= 660
-                      ? (constraints.maxWidth - 16) / 2
-                      : constraints.maxWidth;
+                  ? (constraints.maxWidth - 16) / 2
+                  : constraints.maxWidth;
 
               return Wrap(
                 spacing: 16,
@@ -94,9 +94,9 @@ class _CodingProfileCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: AppTheme.ink,
-                            fontWeight: FontWeight.w900,
-                          ),
+                        color: AppTheme.ink,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
                     Text(
                       profile.handle,

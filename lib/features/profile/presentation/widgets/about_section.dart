@@ -56,9 +56,9 @@ class _AboutCopy extends StatelessWidget {
           Text(
             paragraph,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: AppTheme.mutedInk,
-                  height: 1.62,
-                ),
+              color: AppTheme.mutedInk,
+              height: 1.62,
+            ),
           ),
           if (paragraph != profile.about.last) const SizedBox(height: 18),
         ],

@@ -6,7 +6,7 @@ import 'package:profile/features/profile/data/models/remote_profile_stats.dart';
 
 class ProfileRemoteDataSource {
   ProfileRemoteDataSource({http.Client? client})
-      : _client = client ?? http.Client();
+    : _client = client ?? http.Client();
 
   final http.Client _client;
 

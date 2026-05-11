@@ -80,10 +80,10 @@ class ProjectCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: AppTheme.ink,
-                            fontWeight: FontWeight.w900,
-                            height: 1.15,
-                          ),
+                        color: AppTheme.ink,
+                        fontWeight: FontWeight.w900,
+                        height: 1.15,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(

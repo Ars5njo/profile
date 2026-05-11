@@ -68,9 +68,9 @@ class _ContactCard extends StatelessWidget {
           Text(
             contact.label,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: AppTheme.ink,
-                  fontWeight: FontWeight.w900,
-                ),
+              color: AppTheme.ink,
+              fontWeight: FontWeight.w900,
+            ),
           ),
           const SizedBox(height: 6),
           Text(

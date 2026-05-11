@@ -144,9 +144,9 @@ class _TopBar extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: AppTheme.primary,
-                        fontWeight: FontWeight.w900,
-                      ),
+                    color: AppTheme.primary,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -283,9 +283,9 @@ class _LoadingView extends StatelessWidget {
                   l10n.loadingProfile,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: AppTheme.ink,
-                        fontWeight: FontWeight.w900,
-                      ),
+                    color: AppTheme.ink,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -329,9 +329,9 @@ class _ErrorView extends StatelessWidget {
                   l10n.loadErrorTitle,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: AppTheme.ink,
-                        fontWeight: FontWeight.w900,
-                      ),
+                    color: AppTheme.ink,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(

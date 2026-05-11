@@ -15,7 +15,7 @@ abstract class ProfileRepository {
 
 class NetworkProfileRepository implements ProfileRepository {
   NetworkProfileRepository({ProfileRemoteDataSource? remoteDataSource})
-      : _remoteDataSource = remoteDataSource ?? ProfileRemoteDataSource();
+    : _remoteDataSource = remoteDataSource ?? ProfileRemoteDataSource();
 
   final ProfileRemoteDataSource _remoteDataSource;
 
@@ -231,10 +231,10 @@ class NetworkProfileRepository implements ProfileRepository {
     final taxonomy = stats == null
         ? l10n.notAvailable
         : stats.topics.isNotEmpty
-            ? stats.topics.take(2).join(' / ')
-            : stats.languages.isNotEmpty
-                ? stats.languages.take(2).join(' / ')
-                : l10n.notAvailable;
+        ? stats.topics.take(2).join(' / ')
+        : stats.languages.isNotEmpty
+        ? stats.languages.take(2).join(' / ')
+        : l10n.notAvailable;
 
     return PortfolioProject(
       name: spec.config.displayName,
