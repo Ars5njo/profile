@@ -298,14 +298,6 @@ class NetworkProfileRepository implements ProfileRepository {
     _RepositoryProjectSpec spec,
     GitHubRepositoryStats? stats,
   ) {
-    final taxonomy = stats == null
-        ? l10n.notAvailable
-        : stats.topics.isNotEmpty
-        ? stats.topics.take(2).join(' / ')
-        : stats.languages.isNotEmpty
-        ? stats.languages.take(2).join(' / ')
-        : l10n.notAvailable;
-
     return PortfolioProject(
       name: spec.config.displayName,
       logoText: spec.config.logoText,
@@ -313,11 +305,7 @@ class NetworkProfileRepository implements ProfileRepository {
       description: spec.description(l10n),
       role: spec.role(l10n),
       accent: spec.config.accent,
-      stack: [
-        ...spec.config.personalStack,
-        for (final language in stats?.languages ?? const <String>[])
-          if (!spec.config.personalStack.contains(language)) language,
-      ],
+      stack: spec.config.personalStack,
       metrics: [
         ProfileMetric(
           label: l10n.repoCommits,
@@ -326,12 +314,6 @@ class NetworkProfileRepository implements ProfileRepository {
         ProfileMetric(
           label: l10n.myCommits,
           value: _formatInt(l10n, stats?.authorCommits),
-        ),
-        ProfileMetric(
-          label: stats != null && stats.topics.isNotEmpty
-              ? l10n.topics
-              : l10n.languages,
-          value: taxonomy,
         ),
       ],
       sourceNote: l10n.apiSource,
