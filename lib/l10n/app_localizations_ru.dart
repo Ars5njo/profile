@@ -67,8 +67,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get summary =>
-      'Делаю Flutter-интерфейсы, web/mobile-приложения и люблю проекты, где UI связан с реальной архитектурой: REST, WebSocket, локальное хранение, CI и понятная feature-first структура.';
+  String get summary => 'TBD';
 
   @override
   String publicSnapshot(Object date) {
@@ -79,20 +78,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get aboutTitle => 'Обо мне';
 
   @override
-  String get aboutSubtitle =>
-      'Короткий профиль без лишней витрины: чем занимаюсь, какие задачи беру и как обычно встраиваюсь в проект.';
+  String get aboutSubtitle => 'TBD';
 
   @override
-  String get aboutParagraph1 =>
-      'Учусь и работаю вокруг Flutter, Dart и прикладной разработки. В командных проектах чаще всего беру frontend: экраны, состояние, интеграции с API и аккуратную сборку пользовательских сценариев.';
+  String get aboutParagraph1 => 'TBD';
 
   @override
-  String get aboutParagraph2 =>
-      'Мне близки проекты с инженерной начинкой: realtime chat, сервисы с backend-инфраструктурой, UI-kit и приложения, которые нужно поддерживать не только в демо, но и после первого релиза.';
+  String get aboutParagraph2 => 'TBD';
 
   @override
-  String get aboutParagraph3 =>
-      'Все численные метрики на странице берутся из публичных сетевых API во время запуска. Если источник недоступен, интерфейс показывает это состояние вместо устаревшего хардкода.';
+  String get aboutParagraph3 => 'TBD';
 
   @override
   String get codingProfilesTitle => 'Профили';

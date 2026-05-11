@@ -67,8 +67,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get summary =>
-      'I build Flutter interfaces, web/mobile applications, and like projects where the UI is tied to real architecture: REST, WebSocket, local storage, CI, and a clear feature-first structure.';
+  String get summary => 'TBD';
 
   @override
   String publicSnapshot(Object date) {
@@ -79,20 +78,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutTitle => 'About me';
 
   @override
-  String get aboutSubtitle =>
-      'A concise developer profile: what I work on, which tasks I usually own, and how I fit into a product team.';
+  String get aboutSubtitle => 'TBD';
 
   @override
-  String get aboutParagraph1 =>
-      'I study and work around Flutter, Dart, and applied software engineering. In team projects I usually own the frontend: screens, state, API integrations, and polished user flows.';
+  String get aboutParagraph1 => ' TBD';
 
   @override
-  String get aboutParagraph2 =>
-      'I enjoy products with engineering depth: realtime chat, backend-backed services, UI kits, and apps that need to remain maintainable after the first demo.';
+  String get aboutParagraph2 => 'TBD';
 
   @override
-  String get aboutParagraph3 =>
-      'All numeric metrics on this page are fetched from public network APIs at runtime. If a source is unavailable, the interface shows that state instead of using stale hardcoded values.';
+  String get aboutParagraph3 => 'TBD';
 
   @override
   String get codingProfilesTitle => 'Coding profiles';

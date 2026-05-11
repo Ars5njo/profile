@@ -23,7 +23,7 @@
       "age": {}
     }
   },
-  "summary": "I build Flutter interfaces, web/mobile applications, and like projects where the UI is tied to real architecture: REST, WebSocket, local storage, CI, and a clear feature-first structure.",
+  "summary": "TBD",
   "publicSnapshot": "Live snapshot: {date}",
   "@publicSnapshot": {
     "placeholders": {
@@ -31,10 +31,10 @@
     }
   },
   "aboutTitle": "About me",
-  "aboutSubtitle": "A concise developer profile: what I work on, which tasks I usually own, and how I fit into a product team.",
-  "aboutParagraph1": "I study and work around Flutter, Dart, and applied software engineering. In team projects I usually own the frontend: screens, state, API integrations, and polished user flows.",
-  "aboutParagraph2": "I enjoy products with engineering depth: realtime chat, backend-backed services, UI kits, and apps that need to remain maintainable after the first demo.",
-  "aboutParagraph3": "All numeric metrics on this page are fetched from public network APIs at runtime. If a source is unavailable, the interface shows that state instead of using stale hardcoded values.",
+  "aboutSubtitle": "TBD",
+  "aboutParagraph1": " TBD",
+  "aboutParagraph2": "TBD",
+  "aboutParagraph3": "TBD",
   "codingProfilesTitle": "Coding profiles",
   "codingProfilesSubtitle": "Live public metrics from GitHub, Codeforces, and LeetCode. Each card links to the original profile.",
   "projectsTitle": "Projects",

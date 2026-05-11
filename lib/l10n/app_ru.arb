@@ -23,7 +23,7 @@
       "age": {}
     }
   },
-  "summary": "Делаю Flutter-интерфейсы, web/mobile-приложения и люблю проекты, где UI связан с реальной архитектурой: REST, WebSocket, локальное хранение, CI и понятная feature-first структура.",
+  "summary": "TBD",
   "publicSnapshot": "Live-срез: {date}",
   "@publicSnapshot": {
     "placeholders": {
@@ -31,10 +31,10 @@
     }
   },
   "aboutTitle": "Обо мне",
-  "aboutSubtitle": "Короткий профиль без лишней витрины: чем занимаюсь, какие задачи беру и как обычно встраиваюсь в проект.",
-  "aboutParagraph1": "Учусь и работаю вокруг Flutter, Dart и прикладной разработки. В командных проектах чаще всего беру frontend: экраны, состояние, интеграции с API и аккуратную сборку пользовательских сценариев.",
-  "aboutParagraph2": "Мне близки проекты с инженерной начинкой: realtime chat, сервисы с backend-инфраструктурой, UI-kit и приложения, которые нужно поддерживать не только в демо, но и после первого релиза.",
-  "aboutParagraph3": "Все численные метрики на странице берутся из публичных сетевых API во время запуска. Если источник недоступен, интерфейс показывает это состояние вместо устаревшего хардкода.",
+  "aboutSubtitle": "TBD",
+  "aboutParagraph1": "TBD",
+  "aboutParagraph2": "TBD",
+  "aboutParagraph3": "TBD",
   "codingProfilesTitle": "Профили",
   "codingProfilesSubtitle": "Live-метрики из GitHub, Codeforces и LeetCode. Каждая карточка ведет на исходный профиль.",
   "projectsTitle": "Проекты",

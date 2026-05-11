@@ -209,7 +209,7 @@ abstract class AppLocalizations {
   /// No description provided for @summary.
   ///
   /// In en, this message translates to:
-  /// **'I build Flutter interfaces, web/mobile applications, and like projects where the UI is tied to real architecture: REST, WebSocket, local storage, CI, and a clear feature-first structure.'**
+  /// **'TBD'**
   String get summary;
 
   /// No description provided for @publicSnapshot.
@@ -227,25 +227,25 @@ abstract class AppLocalizations {
   /// No description provided for @aboutSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'A concise developer profile: what I work on, which tasks I usually own, and how I fit into a product team.'**
+  /// **'TBD'**
   String get aboutSubtitle;
 
   /// No description provided for @aboutParagraph1.
   ///
   /// In en, this message translates to:
-  /// **'I study and work around Flutter, Dart, and applied software engineering. In team projects I usually own the frontend: screens, state, API integrations, and polished user flows.'**
+  /// **' TBD'**
   String get aboutParagraph1;
 
   /// No description provided for @aboutParagraph2.
   ///
   /// In en, this message translates to:
-  /// **'I enjoy products with engineering depth: realtime chat, backend-backed services, UI kits, and apps that need to remain maintainable after the first demo.'**
+  /// **'TBD'**
   String get aboutParagraph2;
 
   /// No description provided for @aboutParagraph3.
   ///
   /// In en, this message translates to:
-  /// **'All numeric metrics on this page are fetched from public network APIs at runtime. If a source is unavailable, the interface shows that state instead of using stale hardcoded values.'**
+  /// **'TBD'**
   String get aboutParagraph3;
 
   /// No description provided for @codingProfilesTitle.
