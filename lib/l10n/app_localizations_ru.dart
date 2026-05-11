@@ -50,13 +50,13 @@ class AppLocalizationsRu extends AppLocalizations {
       'Страница готова, но один из сетевых источников упал до сборки профиля.';
 
   @override
-  String get fullName => 'Arsen Latipov';
+  String get fullName => 'Арсен Латипов';
 
   @override
   String get role => 'Flutter Developer';
 
   @override
-  String get location => 'Innopolis, Russia';
+  String get location => 'Иннополис, Россия';
 
   @override
   String get ageValue => '19';
@@ -95,7 +95,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Все численные метрики на странице берутся из публичных сетевых API во время запуска. Если источник недоступен, интерфейс показывает это состояние вместо устаревшего хардкода.';
 
   @override
-  String get codingProfilesTitle => 'Coding profiles';
+  String get codingProfilesTitle => 'Профили';
 
   @override
   String get codingProfilesSubtitle =>
@@ -120,13 +120,13 @@ class AppLocalizationsRu extends AppLocalizations {
       'Собрано на Flutter Web, l10n, live API и feature-first архитектуре.';
 
   @override
-  String get telegramNote => 'Публичный handle';
+  String get telegramNote => '';
 
   @override
-  String get emailValue => 'добавить почту';
+  String get emailValue => 'busyars5njo@gmail.com';
 
   @override
-  String get emailNote => 'Не опубликовано в публичных профилях';
+  String get emailNote => '';
 
   @override
   String get githubContactValue => 'github.com/Ars5njo';

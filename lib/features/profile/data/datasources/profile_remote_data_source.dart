@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:profile/features/profile/data/models/remote_profile_stats.dart';
 
@@ -11,13 +12,18 @@ class ProfileRemoteDataSource {
 
   Future<GitHubUserStats?> fetchGitHubUser(String login) async {
     return _guard(() async {
-      final response = await _client.get(
-        Uri.https('api.github.com', '/users/$login'),
-        headers: _githubHeaders,
-      );
+      final uri = Uri.https('api.github.com', '/users/$login');
+
+      _log('GET $uri');
+
+      final response = await _client.get(uri, headers: _githubHeaders);
+
+      _logResponse(operation: 'fetchGitHubUser', response: response);
+
       if (response.statusCode != 200) return null;
 
       final json = jsonDecode(response.body) as Map<String, dynamic>;
+
       return GitHubUserStats(
         publicRepos: _asInt(json['public_repos']),
         followers: _asInt(json['followers']),
@@ -29,35 +35,61 @@ class ProfileRemoteDataSource {
 
   Future<CodeforcesUserStats?> fetchCodeforcesUser(String handle) async {
     return _guard(() async {
-      final response = await _client.get(
-        Uri.https('codeforces.com', '/api/user.info', {'handles': handle}),
-      );
+      final uri = Uri.https('codeforces.com', '/api/user.info', {
+        'handles': handle,
+      });
+
+      _log('GET $uri');
+
+      final response = await _client.get(uri);
+
+      _logResponse(operation: 'fetchCodeforcesUser', response: response);
+
       if (response.statusCode != 200) return null;
 
       final json = jsonDecode(response.body) as Map<String, dynamic>;
       final result = json['result'];
-      if (result is! List || result.isEmpty) return null;
 
-      final user = result.first as Map<String, dynamic>;
+      if (result is! List || result.isEmpty) {
+        _log('Codeforces result is empty or invalid');
+        return null;
+      }
+
+      final first = result.first;
+
+      if (first is! Map<String, dynamic>) {
+        _log('Codeforces user object has invalid type');
+        return null;
+      }
+
       return CodeforcesUserStats(
-        rating: _asInt(user['rating']),
-        maxRating: _asInt(user['maxRating']),
-        rank: user['rank'] as String?,
-        contribution: _asInt(user['contribution']),
-        city: user['city'] as String?,
-        organization: user['organization'] as String?,
+        rating: _asInt(first['rating']),
+        maxRating: _asInt(first['maxRating']),
+        rank: first['rank'] as String?,
+        contribution: _asInt(first['contribution']),
+        city: first['city'] as String?,
+        organization: first['organization'] as String?,
       );
     });
   }
 
   Future<LeetCodeUserStats?> fetchLeetCodeUser(String username) async {
     return _guard(() async {
-      final response = await _client.get(
-        Uri.https('leetcode-api-faisalshohag.vercel.app', '/$username'),
+      final uri = Uri.https(
+        'leetcode-api-faisalshohag.vercel.app',
+        '/$username',
       );
+
+      _log('GET $uri');
+
+      final response = await _client.get(uri);
+
+      _logResponse(operation: 'fetchLeetCodeUser', response: response);
+
       if (response.statusCode != 200) return null;
 
       final json = jsonDecode(response.body) as Map<String, dynamic>;
+
       return LeetCodeUserStats(
         totalSolved: _asInt(json['totalSolved']),
         easySolved: _asInt(json['easySolved']),
@@ -73,13 +105,21 @@ class ProfileRemoteDataSource {
     required String contributorLogin,
   }) async {
     return _guard(() async {
-      final repoResponse = await _client.get(
-        Uri.https('api.github.com', '/repos/${ref.owner}/${ref.name}'),
-        headers: _githubHeaders,
+      final uri = Uri.https(
+        'api.github.com',
+        '/repos/${ref.owner}/${ref.name}',
       );
+
+      _log('GET $uri');
+
+      final repoResponse = await _client.get(uri, headers: _githubHeaders);
+
+      _logResponse(operation: 'fetchGitHubRepository', response: repoResponse);
+
       if (repoResponse.statusCode != 200) return null;
 
       final repoJson = jsonDecode(repoResponse.body) as Map<String, dynamic>;
+
       final repoTopics = (repoJson['topics'] as List<dynamic>? ?? const [])
           .whereType<String>()
           .toList(growable: false);
@@ -89,6 +129,14 @@ class ProfileRemoteDataSource {
         _fetchCommitCount(ref),
         _fetchContributorCommits(ref, contributorLogin),
       ]);
+
+      _log('''
+Repository metrics:
+repo=${ref.owner}/${ref.name}
+languages=${results[0]}
+totalCommits=${results[1]}
+authorCommits=${results[2]}
+''');
 
       return GitHubRepositoryStats(
         totalCommits: results[1] as int?,
@@ -103,20 +151,29 @@ class ProfileRemoteDataSource {
 
   Future<GitHubSearchStats?> searchGitHubRepositories(String query) async {
     return _guard(() async {
-      final response = await _client.get(
-        Uri.https('api.github.com', '/search/repositories', {
-          'q': query,
-          'per_page': '1',
-        }),
-        headers: _githubHeaders,
-      );
+      final uri = Uri.https('api.github.com', '/search/repositories', {
+        'q': query,
+        'per_page': '1',
+      });
+
+      _log('GET $uri');
+
+      final response = await _client.get(uri, headers: _githubHeaders);
+
+      _logResponse(operation: 'searchGitHubRepositories', response: response);
+
       if (response.statusCode != 200) return null;
 
       final json = jsonDecode(response.body) as Map<String, dynamic>;
       final items = json['items'];
+
       Map<String, dynamic>? firstItem;
+
       if (items is List && items.isNotEmpty) {
-        firstItem = items.first as Map<String, dynamic>;
+        final first = items.first;
+        if (first is Map<String, dynamic>) {
+          firstItem = first;
+        }
       }
 
       return GitHubSearchStats(
@@ -130,26 +187,43 @@ class ProfileRemoteDataSource {
   Future<List<String>> _fetchRepositoryLanguages(
     GitHubRepositoryRef ref,
   ) async {
-    final response = await _client.get(
-      Uri.https('api.github.com', '/repos/${ref.owner}/${ref.name}/languages'),
-      headers: _githubHeaders,
+    final uri = Uri.https(
+      'api.github.com',
+      '/repos/${ref.owner}/${ref.name}/languages',
     );
+
+    _log('GET $uri');
+
+    final response = await _client.get(uri, headers: _githubHeaders);
+
+    _logResponse(operation: '_fetchRepositoryLanguages', response: response);
+
     if (response.statusCode != 200) return const [];
 
     final json = jsonDecode(response.body) as Map<String, dynamic>;
+
     return json.keys.take(4).toList(growable: false);
   }
 
   Future<int?> _fetchCommitCount(GitHubRepositoryRef ref) async {
-    final response = await _client.get(
-      Uri.https('api.github.com', '/repos/${ref.owner}/${ref.name}/commits', {
-        'per_page': '1',
-      }),
-      headers: _githubHeaders,
+    final uri = Uri.https(
+      'api.github.com',
+      '/repos/${ref.owner}/${ref.name}/commits',
+      {'per_page': '1'},
     );
+
+    _log('GET $uri');
+
+    final response = await _client.get(uri, headers: _githubHeaders);
+
+    _logResponse(operation: '_fetchCommitCount', response: response);
+
     if (response.statusCode != 200) return null;
 
     final link = response.headers['link'];
+
+    _log('Commit link header: $link');
+
     final totalFromLink = _lastPageFromLinkHeader(link);
     if (totalFromLink != null) return totalFromLink;
 
@@ -161,13 +235,18 @@ class ProfileRemoteDataSource {
     GitHubRepositoryRef ref,
     String contributorLogin,
   ) async {
-    final response = await _client.get(
-      Uri.https(
-        'api.github.com',
-        '/repos/${ref.owner}/${ref.name}/contributors',
-      ),
-      headers: _githubHeaders,
+    final uri = Uri.https(
+      'api.github.com',
+      '/repos/${ref.owner}/${ref.name}/contributors',
+      {'per_page': '100'},
     );
+
+    _log('GET $uri');
+
+    final response = await _client.get(uri, headers: _githubHeaders);
+
+    _logResponse(operation: '_fetchContributorCommits', response: response);
+
     if (response.statusCode != 200) return null;
 
     final json = jsonDecode(response.body);
@@ -175,23 +254,48 @@ class ProfileRemoteDataSource {
 
     for (final contributor in json.whereType<Map<String, dynamic>>()) {
       final login = contributor['login'];
+
       if (login is String &&
           login.toLowerCase() == contributorLogin.toLowerCase()) {
+        _log(
+          'Matched contributor: $login, commits=${contributor['contributions']}',
+        );
         return _asInt(contributor['contributions']);
       }
     }
+
+    _log('Contributor $contributorLogin not found in ${ref.owner}/${ref.name}');
+
     return 0;
+  }
+
+  void _logResponse({
+    required String operation,
+    required http.Response response,
+  }) {
+    _log('''
+[$operation]
+STATUS: ${response.statusCode}
+RATE LIMIT: ${response.headers['x-ratelimit-remaining']} / ${response.headers['x-ratelimit-limit']}
+RESET: ${response.headers['x-ratelimit-reset']}
+
+BODY:
+${response.body}
+''');
   }
 
   int? _lastPageFromLinkHeader(String? linkHeader) {
     if (linkHeader == null) return null;
+
     String? lastLink;
+
     for (final part in linkHeader.split(',').map((part) => part.trim())) {
       if (part.endsWith('rel="last"')) {
         lastLink = part;
         break;
       }
     }
+
     if (lastLink == null) return null;
 
     final match = RegExp(r'[?&]page=(\d+)>').firstMatch(lastLink);
@@ -201,7 +305,15 @@ class ProfileRemoteDataSource {
   Future<T?> _guard<T>(Future<T?> Function() operation) async {
     try {
       return await operation();
-    } catch (_) {
+    } catch (e, st) {
+      _log('''
+ERROR:
+$e
+
+STACKTRACE:
+$st
+''');
+
       return null;
     }
   }
@@ -210,13 +322,27 @@ class ProfileRemoteDataSource {
     if (value is int) return value;
     if (value is num) return value.toInt();
     if (value is String) return int.tryParse(value);
+
+    _log('Failed to parse int from value: $value');
+
     return null;
   }
 
   DateTime? _asDate(Object? value) {
-    if (value is! String) return null;
+    if (value is! String) {
+      _log('Failed to parse date from value: $value');
+      return null;
+    }
+
     return DateTime.tryParse(value);
   }
 
-  static const _githubHeaders = {'Accept': 'application/vnd.github+json'};
+  void _log(String message) {
+    debugPrint('[ProfileRemoteDataSource] $message');
+  }
+
+  static const _githubHeaders = {
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
 }

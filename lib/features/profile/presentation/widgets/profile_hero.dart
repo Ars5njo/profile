@@ -114,14 +114,6 @@ class _HeroCopy extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 30),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: [
-            for (final metric in profile.heroMetrics)
-              _HeroMetric(metric: metric),
-          ],
-        ),
       ],
     );
   }

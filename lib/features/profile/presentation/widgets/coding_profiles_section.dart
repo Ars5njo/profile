@@ -113,14 +113,6 @@ class _CodingProfileCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          Text(
-            profile.headline,
-            style: const TextStyle(
-              color: AppTheme.ink,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 18),
           _MetricsGrid(metrics: profile.metrics),
           const SizedBox(height: 18),
           ExternalLinkButton(

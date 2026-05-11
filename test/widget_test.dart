@@ -29,7 +29,7 @@ class _FakeProfileRepository implements ProfileRepository {
       age: l10n.ageValue,
       role: l10n.role,
       location: l10n.location,
-      avatarAssetPath: 'assets/images/arsen_latipov.jpg',
+      avatarAssetPath: 'assets/images/arsen_latipov.jpeg',
       summary: l10n.summary,
       about: [l10n.aboutParagraph1],
       heroMetrics: [

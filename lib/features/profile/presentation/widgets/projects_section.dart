@@ -100,14 +100,6 @@ class ProjectCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 18),
-          Text(
-            project.description,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.mutedInk,
-              height: 1.55,
-            ),
-          ),
-          const SizedBox(height: 18),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -118,18 +110,6 @@ class ProjectCard extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           _ProjectMetrics(metrics: project.metrics),
-          if (project.sourceNote case final note?) ...[
-            const SizedBox(height: 14),
-            Text(
-              note,
-              style: const TextStyle(
-                color: AppTheme.mutedInk,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                height: 1.35,
-              ),
-            ),
-          ],
           if (project.hasPublicUrl) ...[
             const SizedBox(height: 18),
             ExternalLinkButton(

@@ -35,15 +35,11 @@ class NetworkProfileRepository implements ProfileRepository {
         ),
       ),
     );
-    final loadBalancerSearchFuture = _remoteDataSource.searchGitHubRepositories(
-      'load-balancer user:$_githubLogin',
-    );
 
     final githubUser = await githubUserFuture;
     final codeforces = await codeforcesFuture;
     final leetCode = await leetCodeFuture;
     final repoStats = await repoStatsFuture;
-    final loadBalancerSearch = await loadBalancerSearchFuture;
 
     final repoStatsByName = <String, GitHubRepositoryStats?>{
       for (var i = 0; i < _repoSpecs.length; i++)
@@ -55,7 +51,7 @@ class NetworkProfileRepository implements ProfileRepository {
       age: l10n.ageValue,
       role: l10n.role,
       location: l10n.location,
-      avatarAssetPath: 'assets/images/arsen_latipov.jpg',
+      avatarAssetPath: 'assets/images/arsen_latipov.jpeg',
       summary: l10n.summary,
       about: [l10n.aboutParagraph1, l10n.aboutParagraph2, l10n.aboutParagraph3],
       heroMetrics: _buildHeroMetrics(l10n, githubUser, codeforces, leetCode),
@@ -69,7 +65,6 @@ class NetworkProfileRepository implements ProfileRepository {
       projects: [
         for (final spec in _repoSpecs)
           _buildRepositoryProject(l10n, spec, repoStatsByName[spec.name]),
-        _buildLoadBalancerProject(l10n, loadBalancerSearch),
       ]..sort((a, b) => _projectOrder(a.name).compareTo(_projectOrder(b.name))),
       updatedAtLabel: l10n.publicSnapshot(_formatDate(l10n, DateTime.now())),
     );
@@ -264,46 +259,6 @@ class NetworkProfileRepository implements ProfileRepository {
     );
   }
 
-  PortfolioProject _buildLoadBalancerProject(
-    AppLocalizations l10n,
-    GitHubSearchStats? search,
-  ) {
-    final foundRepository = search?.firstRepositoryName;
-
-    return PortfolioProject(
-      name: 'load-balancer',
-      logoText: 'LB',
-      url: search?.firstRepositoryUrl,
-      description: l10n.loadBalancerDescription,
-      role: l10n.loadBalancerRole,
-      accent: ProfileAccent.blue,
-      stack: const [
-        'HTTP',
-        'Routing',
-        'Health checks',
-        'Concurrency',
-        'Docker',
-      ],
-      metrics: [
-        ProfileMetric(
-          label: l10n.publicRepo,
-          value:
-              foundRepository ??
-              (search == null ? l10n.notAvailable : l10n.notFound),
-        ),
-        ProfileMetric(
-          label: l10n.stats,
-          value: foundRepository == null
-              ? l10n.notAvailable
-              : l10n.githubSearchSource,
-        ),
-      ],
-      sourceNote: foundRepository == null
-          ? l10n.repoNotFoundNote
-          : l10n.githubSearchSource,
-    );
-  }
-
   int _projectOrder(String projectName) {
     return switch (projectName) {
       'tiktok-book' => 0,
@@ -345,6 +300,15 @@ class NetworkProfileRepository implements ProfileRepository {
       role: (l10n) => l10n.tiktokRole,
     ),
     _RepositoryProjectSpec(
+      name: 'load-balancer',
+      logoText: 'LB',
+      ref: const GitHubRepositoryRef(owner: 'SNA-RATA', name: 'load-balancer'),
+      accent: ProfileAccent.teal,
+      personalStack: const ['Flutter', 'Dart', 'REST API'],
+      description: (l10n) => l10n.tiktokDescription,
+      role: (l10n) => l10n.tiktokRole,
+    ),
+    _RepositoryProjectSpec(
       name: 'VRATA',
       logoText: 'VR',
       ref: const GitHubRepositoryRef(owner: 'Messenger-DNP', name: 'VRATA'),
@@ -367,13 +331,7 @@ class NetworkProfileRepository implements ProfileRepository {
         name: 'md_ui_kit',
       ),
       accent: ProfileAccent.coral,
-      personalStack: const [
-        'Flutter',
-        'Dart',
-        'Design system',
-        'Stories',
-        'Knobs',
-      ],
+      personalStack: const ['Flutter', 'Dart', 'Storybook', 'Stories', 'Knobs'],
       description: (l10n) => l10n.uiKitDescription,
       role: (l10n) => l10n.uiKitRole,
     ),

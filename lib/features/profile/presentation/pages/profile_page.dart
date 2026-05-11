@@ -247,17 +247,20 @@ class _ProfileContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ProfileHero(profile: profile),
-          AboutSection(profile: profile),
-          CodingProfilesSection(profiles: profile.codingProfiles),
-          ProjectsSection(projects: profile.projects),
-          ContactSection(contacts: profile.contacts),
-        ],
-      ),
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(child: ProfileHero(profile: profile)),
+
+        SliverToBoxAdapter(child: AboutSection(profile: profile)),
+
+        SliverToBoxAdapter(
+          child: CodingProfilesSection(profiles: profile.codingProfiles),
+        ),
+
+        SliverToBoxAdapter(child: ProjectsSection(projects: profile.projects)),
+
+        SliverToBoxAdapter(child: ContactSection(contacts: profile.contacts)),
+      ],
     );
   }
 }
