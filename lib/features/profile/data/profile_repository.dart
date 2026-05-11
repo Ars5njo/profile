@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:profile/features/profile/config/profile_config.dart';
 import 'package:profile/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:profile/features/profile/data/models/remote_profile_stats.dart';
 import 'package:profile/features/profile/domain/entities/coding_profile.dart';
@@ -14,24 +15,26 @@ abstract class ProfileRepository {
 
 class NetworkProfileRepository implements ProfileRepository {
   NetworkProfileRepository({ProfileRemoteDataSource? remoteDataSource})
-    : _remoteDataSource = remoteDataSource ?? ProfileRemoteDataSource();
+      : _remoteDataSource = remoteDataSource ?? ProfileRemoteDataSource();
 
   final ProfileRemoteDataSource _remoteDataSource;
 
   @override
   Future<DeveloperProfile> loadProfile(AppLocalizations l10n) async {
-    final githubUserFuture = _remoteDataSource.fetchGitHubUser(_githubLogin);
+    final githubUserFuture = _remoteDataSource.fetchGitHubUser(
+      ProfileConfig.githubLogin,
+    );
     final codeforcesFuture = _remoteDataSource.fetchCodeforcesUser(
-      _codeforcesHandle,
+      ProfileConfig.codeforcesHandle,
     );
     final leetCodeFuture = _remoteDataSource.fetchLeetCodeUser(
-      _leetCodeUsername,
+      ProfileConfig.leetCodeUsername,
     );
     final repoStatsFuture = Future.wait(
       _repoSpecs.map(
         (spec) => _remoteDataSource.fetchGitHubRepository(
           ref: spec.ref,
-          contributorLogin: _githubLogin,
+          contributorLogin: ProfileConfig.githubLogin,
         ),
       ),
     );
@@ -43,15 +46,17 @@ class NetworkProfileRepository implements ProfileRepository {
 
     final repoStatsByName = <String, GitHubRepositoryStats?>{
       for (var i = 0; i < _repoSpecs.length; i++)
-        _repoSpecs[i].name: repoStats[i],
+        _repoSpecs[i].config.displayName: repoStats[i],
     };
+    final orderedRepoSpecs = [..._repoSpecs]
+      ..sort((a, b) => a.config.order.compareTo(b.config.order));
 
     return DeveloperProfile(
       fullName: l10n.fullName,
       age: l10n.ageValue,
       role: l10n.role,
       location: l10n.location,
-      avatarAssetPath: 'assets/images/arsen_latipov.jpeg',
+      avatarAssetPath: ProfileConfig.avatarAssetPath,
       summary: l10n.summary,
       about: [l10n.aboutParagraph1, l10n.aboutParagraph2, l10n.aboutParagraph3],
       heroMetrics: _buildHeroMetrics(l10n, githubUser, codeforces, leetCode),
@@ -63,9 +68,13 @@ class NetworkProfileRepository implements ProfileRepository {
         leetCode,
       ),
       projects: [
-        for (final spec in _repoSpecs)
-          _buildRepositoryProject(l10n, spec, repoStatsByName[spec.name]),
-      ]..sort((a, b) => _projectOrder(a.name).compareTo(_projectOrder(b.name))),
+        for (final spec in orderedRepoSpecs)
+          _buildRepositoryProject(
+            l10n,
+            spec,
+            repoStatsByName[spec.config.displayName],
+          ),
+      ],
       updatedAtLabel: l10n.publicSnapshot(_formatDate(l10n, DateTime.now())),
     );
   }
@@ -103,23 +112,23 @@ class NetworkProfileRepository implements ProfileRepository {
   List<ContactLink> _buildContacts(AppLocalizations l10n) {
     return [
       ContactLink(
-        label: 'Telegram',
-        value: '@Ars5njo',
-        icon: 'telegram',
-        url: 'https://t.me/Ars5njo',
+        label: ProfileConfig.telegramContact.label,
+        value: ProfileConfig.telegramContact.value,
+        icon: ProfileConfig.telegramContact.icon,
+        url: ProfileConfig.telegramContact.url,
         note: l10n.telegramNote,
       ),
       ContactLink(
-        label: 'Email',
-        value: l10n.emailValue,
-        icon: 'mail',
+        label: ProfileConfig.emailContact.label,
+        value: ProfileConfig.emailContact.value,
+        icon: ProfileConfig.emailContact.icon,
         note: l10n.emailNote,
       ),
       ContactLink(
-        label: 'GitHub',
-        value: l10n.githubContactValue,
-        icon: 'github',
-        url: 'https://github.com/$_githubLogin',
+        label: ProfileConfig.githubContact.label,
+        value: ProfileConfig.githubContact.value,
+        icon: ProfileConfig.githubContact.icon,
+        url: ProfileConfig.githubContact.url,
       ),
     ];
   }
@@ -135,9 +144,9 @@ class NetworkProfileRepository implements ProfileRepository {
 
     return [
       CodingProfile(
-        platform: 'GitHub',
-        handle: _githubLogin,
-        url: 'https://github.com/$_githubLogin',
+        platform: ProfileConfig.githubSocial.platform,
+        handle: ProfileConfig.githubSocial.handle,
+        url: ProfileConfig.githubSocial.url,
         headline: l10n.githubHeadline,
         accent: ProfileAccent.teal,
         metrics: [
@@ -160,9 +169,9 @@ class NetworkProfileRepository implements ProfileRepository {
         ],
       ),
       CodingProfile(
-        platform: 'Codeforces',
-        handle: _codeforcesHandle,
-        url: 'https://codeforces.com/profile/$_codeforcesHandle',
+        platform: ProfileConfig.codeforcesSocial.platform,
+        handle: ProfileConfig.codeforcesSocial.handle,
+        url: ProfileConfig.codeforcesSocial.url,
         headline: l10n.codeforcesHeadline(
           codeforcesRank,
           codeforcesOrganization,
@@ -185,9 +194,9 @@ class NetworkProfileRepository implements ProfileRepository {
         ],
       ),
       CodingProfile(
-        platform: 'LeetCode',
-        handle: _leetCodeUsername,
-        url: 'https://leetcode.com/u/$_leetCodeUsername/',
+        platform: ProfileConfig.leetCodeSocial.platform,
+        handle: ProfileConfig.leetCodeSocial.handle,
+        url: ProfileConfig.leetCodeSocial.url,
         headline: l10n.leetcodeHeadline(
           _formatInt(l10n, leetCode?.totalSolved),
         ),
@@ -222,22 +231,22 @@ class NetworkProfileRepository implements ProfileRepository {
     final taxonomy = stats == null
         ? l10n.notAvailable
         : stats.topics.isNotEmpty
-        ? stats.topics.take(2).join(' / ')
-        : stats.languages.isNotEmpty
-        ? stats.languages.take(2).join(' / ')
-        : l10n.notAvailable;
+            ? stats.topics.take(2).join(' / ')
+            : stats.languages.isNotEmpty
+                ? stats.languages.take(2).join(' / ')
+                : l10n.notAvailable;
 
     return PortfolioProject(
-      name: spec.name,
-      logoText: spec.logoText,
-      url: spec.ref.url,
+      name: spec.config.displayName,
+      logoText: spec.config.logoText,
+      url: spec.config.url,
       description: spec.description(l10n),
       role: spec.role(l10n),
-      accent: spec.accent,
+      accent: spec.config.accent,
       stack: [
-        ...spec.personalStack,
+        ...spec.config.personalStack,
         for (final language in stats?.languages ?? const <String>[])
-          if (!spec.personalStack.contains(language)) language,
+          if (!spec.config.personalStack.contains(language)) language,
       ],
       metrics: [
         ProfileMetric(
@@ -259,17 +268,6 @@ class NetworkProfileRepository implements ProfileRepository {
     );
   }
 
-  int _projectOrder(String projectName) {
-    return switch (projectName) {
-      'tiktok-book' => 0,
-      'load-balancer' => 1,
-      'VRATA' => 2,
-      'md_ui_kit' => 3,
-      'tatar-shower-app-flutter-go' => 4,
-      _ => 99,
-    };
-  }
-
   String _formatInt(AppLocalizations l10n, int? value) {
     if (value == null) return l10n.notAvailable;
     return NumberFormat.decimalPattern(l10n.localeName).format(value);
@@ -285,65 +283,29 @@ class NetworkProfileRepository implements ProfileRepository {
     return value;
   }
 
-  static const _githubLogin = 'Ars5njo';
-  static const _codeforcesHandle = 'Ars5nj0';
-  static const _leetCodeUsername = 'Ars5njo';
-
   static final _repoSpecs = [
     _RepositoryProjectSpec(
-      name: 'tiktok-book',
-      logoText: 'TB',
-      ref: const GitHubRepositoryRef(owner: 'Ars5njo', name: 'tiktok-book'),
-      accent: ProfileAccent.teal,
-      personalStack: const ['Flutter', 'Dart', 'Widgetbook'],
+      config: ProfileConfig.tiktokBookRepository,
       description: (l10n) => l10n.tiktokDescription,
       role: (l10n) => l10n.tiktokRole,
     ),
     _RepositoryProjectSpec(
-      name: 'load-balancer',
-      logoText: 'LB',
-      ref: const GitHubRepositoryRef(owner: 'SNA-RATA', name: 'load-balancer'),
-      accent: ProfileAccent.teal,
-      personalStack: const ['Flutter', 'Dart', 'REST API'],
+      config: ProfileConfig.loadBalancerRepository,
       description: (l10n) => l10n.tiktokDescription,
       role: (l10n) => l10n.tiktokRole,
     ),
     _RepositoryProjectSpec(
-      name: 'VRATA',
-      logoText: 'VR',
-      ref: const GitHubRepositoryRef(owner: 'Messenger-DNP', name: 'VRATA'),
-      accent: ProfileAccent.violet,
-      personalStack: const [
-        'Flutter',
-        'Dart',
-        'Riverpod',
-        'REST API',
-        'WebSocket/STOMP',
-      ],
+      config: ProfileConfig.vrataRepository,
       description: (l10n) => l10n.vrataDescription,
       role: (l10n) => l10n.vrataRole,
     ),
     _RepositoryProjectSpec(
-      name: 'md_ui_kit',
-      logoText: 'MD',
-      ref: const GitHubRepositoryRef(
-        owner: 'Miracle-Development',
-        name: 'md_ui_kit',
-      ),
-      accent: ProfileAccent.coral,
-      personalStack: const ['Flutter', 'Dart', 'Storybook', 'Stories', 'Knobs'],
+      config: ProfileConfig.mdUiKitRepository,
       description: (l10n) => l10n.uiKitDescription,
       role: (l10n) => l10n.uiKitRole,
     ),
     _RepositoryProjectSpec(
-      name: 'tatar-shower-app-flutter-go',
-      logoText: 'TS',
-      ref: const GitHubRepositoryRef(
-        owner: 'Ars5njo',
-        name: 'tatar-shower-app-flutter-go',
-      ),
-      accent: ProfileAccent.amber,
-      personalStack: const ['Flutter', 'Dart'],
+      config: ProfileConfig.tatarShowerRepository,
       description: (l10n) => l10n.tatarDescription,
       role: (l10n) => l10n.tatarRole,
     ),
@@ -352,20 +314,15 @@ class NetworkProfileRepository implements ProfileRepository {
 
 class _RepositoryProjectSpec {
   const _RepositoryProjectSpec({
-    required this.name,
-    required this.logoText,
-    required this.ref,
-    required this.accent,
-    required this.personalStack,
+    required this.config,
     required this.description,
     required this.role,
   });
 
-  final String name;
-  final String logoText;
-  final GitHubRepositoryRef ref;
-  final ProfileAccent accent;
-  final List<String> personalStack;
+  final ProfileRepositoryConfig config;
   final String Function(AppLocalizations l10n) description;
   final String Function(AppLocalizations l10n) role;
+
+  GitHubRepositoryRef get ref =>
+      GitHubRepositoryRef(owner: config.owner, name: config.repo);
 }

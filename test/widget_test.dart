@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:profile/app/profile_app.dart';
 import 'package:profile/features/profile/data/profile_repository.dart';
@@ -12,11 +13,30 @@ void main() {
   testWidgets('renders localized profile landing content', (tester) async {
     await tester.pumpWidget(ProfileApp(repository: _FakeProfileRepository()));
     await tester.pumpAndSettle();
+    final scrollable = find.byType(Scrollable);
 
-    expect(find.text('Arsen Latipov'), findsWidgets);
+    expect(find.text('Арсен Латипов'), findsWidgets);
+
+    await tester.scrollUntilVisible(
+      find.text('Обо мне'),
+      500,
+      scrollable: scrollable,
+    );
     expect(find.text('Обо мне'), findsOneWidget);
     expect(find.text('Codeforces'), findsWidgets);
+
+    await tester.scrollUntilVisible(
+      find.text('tiktok-book'),
+      500,
+      scrollable: scrollable,
+    );
     expect(find.text('tiktok-book'), findsOneWidget);
+
+    await tester.scrollUntilVisible(
+      find.text('tatar-shower-app-flutter-go'),
+      500,
+      scrollable: scrollable,
+    );
     expect(find.text('tatar-shower-app-flutter-go'), findsOneWidget);
   });
 }

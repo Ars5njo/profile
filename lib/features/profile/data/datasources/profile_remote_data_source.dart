@@ -6,19 +6,29 @@ import 'package:profile/features/profile/data/models/remote_profile_stats.dart';
 
 class ProfileRemoteDataSource {
   ProfileRemoteDataSource({http.Client? client})
-    : _client = client ?? http.Client();
+      : _client = client ?? http.Client();
 
   final http.Client _client;
 
   Future<GitHubUserStats?> fetchGitHubUser(String login) async {
     return _guard(() async {
+      // TODO(github-pages): Flutter Web must not contain GitHub tokens or
+      // secrets. Direct browser calls to the GitHub API use the unauthenticated
+      // rate limit and can fail after several reloads. For production on
+      // GitHub Pages, generate assets/data/profile_snapshot.json in GitHub
+      // Actions with GITHUB_TOKEN, then have Flutter read that asset instead
+      // of making live GitHub API requests.
       final uri = Uri.https('api.github.com', '/users/$login');
 
       _log('GET $uri');
 
       final response = await _client.get(uri, headers: _githubHeaders);
 
-      _logResponse(operation: 'fetchGitHubUser', response: response);
+      _logResponse(
+        operation: 'fetchGitHubUser',
+        requestUrl: uri,
+        response: response,
+      );
 
       if (response.statusCode != 200) return null;
 
@@ -43,7 +53,11 @@ class ProfileRemoteDataSource {
 
       final response = await _client.get(uri);
 
-      _logResponse(operation: 'fetchCodeforcesUser', response: response);
+      _logResponse(
+        operation: 'fetchCodeforcesUser',
+        requestUrl: uri,
+        response: response,
+      );
 
       if (response.statusCode != 200) return null;
 
@@ -84,7 +98,11 @@ class ProfileRemoteDataSource {
 
       final response = await _client.get(uri);
 
-      _logResponse(operation: 'fetchLeetCodeUser', response: response);
+      _logResponse(
+        operation: 'fetchLeetCodeUser',
+        requestUrl: uri,
+        response: response,
+      );
 
       if (response.statusCode != 200) return null;
 
@@ -114,7 +132,11 @@ class ProfileRemoteDataSource {
 
       final repoResponse = await _client.get(uri, headers: _githubHeaders);
 
-      _logResponse(operation: 'fetchGitHubRepository', response: repoResponse);
+      _logResponse(
+        operation: 'fetchGitHubRepository',
+        requestUrl: uri,
+        response: repoResponse,
+      );
 
       if (repoResponse.statusCode != 200) return null;
 
@@ -160,7 +182,11 @@ authorCommits=${results[2]}
 
       final response = await _client.get(uri, headers: _githubHeaders);
 
-      _logResponse(operation: 'searchGitHubRepositories', response: response);
+      _logResponse(
+        operation: 'searchGitHubRepositories',
+        requestUrl: uri,
+        response: response,
+      );
 
       if (response.statusCode != 200) return null;
 
@@ -196,7 +222,11 @@ authorCommits=${results[2]}
 
     final response = await _client.get(uri, headers: _githubHeaders);
 
-    _logResponse(operation: '_fetchRepositoryLanguages', response: response);
+    _logResponse(
+      operation: '_fetchRepositoryLanguages',
+      requestUrl: uri,
+      response: response,
+    );
 
     if (response.statusCode != 200) return const [];
 
@@ -216,7 +246,11 @@ authorCommits=${results[2]}
 
     final response = await _client.get(uri, headers: _githubHeaders);
 
-    _logResponse(operation: '_fetchCommitCount', response: response);
+    _logResponse(
+      operation: '_fetchCommitCount',
+      requestUrl: uri,
+      response: response,
+    );
 
     if (response.statusCode != 200) return null;
 
@@ -245,7 +279,11 @@ authorCommits=${results[2]}
 
     final response = await _client.get(uri, headers: _githubHeaders);
 
-    _logResponse(operation: '_fetchContributorCommits', response: response);
+    _logResponse(
+      operation: '_fetchContributorCommits',
+      requestUrl: uri,
+      response: response,
+    );
 
     if (response.statusCode != 200) return null;
 
@@ -271,13 +309,17 @@ authorCommits=${results[2]}
 
   void _logResponse({
     required String operation,
+    required Uri requestUrl,
     required http.Response response,
   }) {
     _log('''
 [$operation]
+REQUEST URL: $requestUrl
 STATUS: ${response.statusCode}
-RATE LIMIT: ${response.headers['x-ratelimit-remaining']} / ${response.headers['x-ratelimit-limit']}
-RESET: ${response.headers['x-ratelimit-reset']}
+GITHUB RATE LIMIT HEADERS:
+x-ratelimit-remaining: ${response.headers['x-ratelimit-remaining']}
+x-ratelimit-limit: ${response.headers['x-ratelimit-limit']}
+x-ratelimit-reset: ${response.headers['x-ratelimit-reset']}
 
 BODY:
 ${response.body}
