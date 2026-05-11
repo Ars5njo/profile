@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:profile/features/profile/config/profile_config.dart';
 import 'package:profile/features/profile/data/datasources/profile_remote_data_source.dart';
+import 'package:profile/features/profile/data/datasources/profile_snapshot_data_source.dart';
 import 'package:profile/features/profile/data/models/remote_profile_stats.dart';
 import 'package:profile/features/profile/domain/entities/coding_profile.dart';
 import 'package:profile/features/profile/domain/entities/contact_link.dart';
@@ -14,42 +16,40 @@ abstract class ProfileRepository {
 }
 
 class NetworkProfileRepository implements ProfileRepository {
-  NetworkProfileRepository({ProfileRemoteDataSource? remoteDataSource})
-    : _remoteDataSource = remoteDataSource ?? ProfileRemoteDataSource();
+  NetworkProfileRepository({
+    ProfileRemoteDataSource? remoteDataSource,
+    ProfileSnapshotDataSource? snapshotDataSource,
+    bool useSnapshot = useProfileSnapshot,
+  }) : _remoteDataSource = remoteDataSource ?? ProfileRemoteDataSource(),
+       _snapshotDataSource =
+           snapshotDataSource ?? const ProfileSnapshotDataSource(),
+       _useProfileSnapshot = useSnapshot;
 
   final ProfileRemoteDataSource _remoteDataSource;
+  final ProfileSnapshotDataSource _snapshotDataSource;
+  final bool _useProfileSnapshot;
 
   @override
   Future<DeveloperProfile> loadProfile(AppLocalizations l10n) async {
-    final githubUserFuture = _remoteDataSource.fetchGitHubUser(
-      ProfileConfig.githubLogin,
-    );
+    final githubDataFuture = _loadGitHubData();
     final codeforcesFuture = _remoteDataSource.fetchCodeforcesUser(
       ProfileConfig.codeforcesHandle,
     );
     final leetCodeFuture = _remoteDataSource.fetchLeetCodeUser(
       ProfileConfig.leetCodeUsername,
     );
-    final repoStatsFuture = Future.wait(
-      _repoSpecs.map(
-        (spec) => _remoteDataSource.fetchGitHubRepository(
-          ref: spec.ref,
-          contributorLogin: ProfileConfig.githubLogin,
-        ),
-      ),
-    );
 
-    final githubUser = await githubUserFuture;
+    final githubData = await githubDataFuture;
     final codeforces = await codeforcesFuture;
     final leetCode = await leetCodeFuture;
-    final repoStats = await repoStatsFuture;
 
     final repoStatsByName = <String, GitHubRepositoryStats?>{
       for (var i = 0; i < _repoSpecs.length; i++)
-        _repoSpecs[i].config.displayName: repoStats[i],
+        _repoSpecs[i].config.displayName: githubData.repositories[i],
     };
     final orderedRepoSpecs = [..._repoSpecs]
       ..sort((a, b) => a.config.order.compareTo(b.config.order));
+    final updatedAt = githubData.generatedAt ?? DateTime.now();
 
     return DeveloperProfile(
       fullName: l10n.fullName,
@@ -59,11 +59,16 @@ class NetworkProfileRepository implements ProfileRepository {
       avatarAssetPath: ProfileConfig.avatarAssetPath,
       summary: l10n.summary,
       about: [l10n.aboutParagraph1, l10n.aboutParagraph2, l10n.aboutParagraph3],
-      heroMetrics: _buildHeroMetrics(l10n, githubUser, codeforces, leetCode),
+      heroMetrics: _buildHeroMetrics(
+        l10n,
+        githubData.user,
+        codeforces,
+        leetCode,
+      ),
       contacts: _buildContacts(l10n),
       codingProfiles: _buildCodingProfiles(
         l10n,
-        githubUser,
+        githubData.user,
         codeforces,
         leetCode,
       ),
@@ -75,7 +80,72 @@ class NetworkProfileRepository implements ProfileRepository {
             repoStatsByName[spec.config.displayName],
           ),
       ],
-      updatedAtLabel: l10n.publicSnapshot(_formatDate(l10n, DateTime.now())),
+      updatedAtLabel: l10n.publicSnapshot(_formatDate(l10n, updatedAt)),
+    );
+  }
+
+  Future<_GitHubProfileData> _loadGitHubData() async {
+    if (_useProfileSnapshot) {
+      final snapshotData = await _loadGitHubSnapshotData();
+      if (snapshotData != null) return snapshotData;
+
+      _log('Snapshot unavailable; falling back to live GitHub API');
+    } else {
+      _log('USE_PROFILE_SNAPSHOT=false; using live GitHub API');
+    }
+
+    return _loadLiveGitHubData();
+  }
+
+  Future<_GitHubProfileData?> _loadGitHubSnapshotData() async {
+    // TODO(github-pages): GitHub Pages production should run
+    // `dart run tool/generate_profile_snapshot.dart` in GitHub Actions before
+    // `flutter build web`, then deploy the built asset bundle. Keep GitHub
+    // tokens in that trusted CI step only; Flutter Web runtime code and assets
+    // are public browser downloads and must never contain secrets.
+    final snapshot = await _snapshotDataSource.loadSnapshot();
+    if (snapshot == null) return null;
+
+    _log(
+      'Using GitHub snapshot generatedAt=${snapshot.generatedAtIsoString}, '
+      'repositories=${snapshot.repositories.length}',
+    );
+
+    final repositories = [
+      for (final spec in _repoSpecs)
+        snapshot.repositoryStatsFor(
+          displayName: spec.config.displayName,
+          ref: spec.ref,
+        ),
+    ];
+
+    return _GitHubProfileData(
+      user: snapshot.githubUserStats,
+      repositories: repositories,
+      generatedAt: snapshot.generatedAt,
+    );
+  }
+
+  Future<_GitHubProfileData> _loadLiveGitHubData() async {
+    final githubUserFuture = _remoteDataSource.fetchGitHubUser(
+      ProfileConfig.githubLogin,
+    );
+    final repoStatsFuture = Future.wait(
+      _repoSpecs.map(
+        (spec) => _remoteDataSource.fetchGitHubRepository(
+          ref: spec.ref,
+          contributorLogin: ProfileConfig.githubLogin,
+        ),
+      ),
+    );
+
+    final githubUser = await githubUserFuture;
+    final repoStats = await repoStatsFuture;
+
+    return _GitHubProfileData(
+      user: githubUser,
+      repositories: repoStats,
+      generatedAt: null,
     );
   }
 
@@ -283,6 +353,10 @@ class NetworkProfileRepository implements ProfileRepository {
     return value;
   }
 
+  void _log(String message) {
+    debugPrint('[NetworkProfileRepository] $message');
+  }
+
   static final _repoSpecs = [
     _RepositoryProjectSpec(
       config: ProfileConfig.tiktokBookRepository,
@@ -310,6 +384,18 @@ class NetworkProfileRepository implements ProfileRepository {
       role: (l10n) => l10n.tatarRole,
     ),
   ];
+}
+
+class _GitHubProfileData {
+  const _GitHubProfileData({
+    required this.user,
+    required this.repositories,
+    required this.generatedAt,
+  });
+
+  final GitHubUserStats? user;
+  final List<GitHubRepositoryStats?> repositories;
+  final DateTime? generatedAt;
 }
 
 class _RepositoryProjectSpec {

@@ -16,8 +16,9 @@ class ProfileRemoteDataSource {
       // secrets. Direct browser calls to the GitHub API use the unauthenticated
       // rate limit and can fail after several reloads. For production on
       // GitHub Pages, generate assets/data/profile_snapshot.json in GitHub
-      // Actions with GITHUB_TOKEN, then have Flutter read that asset instead
-      // of making live GitHub API requests.
+      // Actions with GITHUB_TOKEN before `flutter build web`. The repository
+      // reads that asset by default; this live path is kept for development
+      // and graceful fallback only.
       final uri = Uri.https('api.github.com', '/users/$login');
 
       _log('GET $uri');

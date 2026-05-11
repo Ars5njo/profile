@@ -12,7 +12,7 @@ const _snapshotOutputPath = 'assets/data/profile_snapshot.json';
 /// token must never be shipped in Flutter code, generated assets, or config
 /// files. Run this tool from a trusted environment instead, such as GitHub
 /// Actions with GITHUB_TOKEN or a local shell with an exported token, then let
-/// the web app read the generated JSON asset in a later runtime refactor.
+/// the web app read the generated JSON asset at runtime.
 Future<void> main() async {
   final token = Platform.environment['GITHUB_TOKEN'];
 

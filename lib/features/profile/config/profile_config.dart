@@ -1,5 +1,10 @@
 import 'package:profile/features/profile/domain/entities/coding_profile.dart';
 
+const useProfileSnapshot = bool.fromEnvironment(
+  'USE_PROFILE_SNAPSHOT',
+  defaultValue: true,
+);
+
 class ProfileConfig {
   const ProfileConfig._();
 
