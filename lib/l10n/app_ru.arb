@@ -1,0 +1,114 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Арсен Латипов",
+  "navHome": "Главная",
+  "navProfiles": "Профили",
+  "navProjects": "Проекты",
+  "navContacts": "Контакты",
+  "contactButton": "Связаться",
+  "languageRu": "RU",
+  "languageEn": "EN",
+  "loadingProfile": "Загружаю live-метрики профиля",
+  "loadingHint": "Запрашиваю GitHub, Codeforces, LeetCode и коммиты репозиториев.",
+  "retry": "Повторить",
+  "loadErrorTitle": "Не получилось загрузить профиль",
+  "loadErrorBody": "Страница готова, но один из сетевых источников упал до сборки профиля.",
+  "fullName": "Arsen Latipov",
+  "role": "Flutter Developer",
+  "location": "Innopolis, Russia",
+  "ageValue": "19",
+  "ageChip": "Возраст: {age}",
+  "@ageChip": {
+    "placeholders": {
+      "age": {}
+    }
+  },
+  "summary": "Делаю Flutter-интерфейсы, web/mobile-приложения и люблю проекты, где UI связан с реальной архитектурой: REST, WebSocket, локальное хранение, CI и понятная feature-first структура.",
+  "publicSnapshot": "Live-срез: {date}",
+  "@publicSnapshot": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "aboutTitle": "Обо мне",
+  "aboutSubtitle": "Короткий профиль без лишней витрины: чем занимаюсь, какие задачи беру и как обычно встраиваюсь в проект.",
+  "aboutParagraph1": "Учусь и работаю вокруг Flutter, Dart и прикладной разработки. В командных проектах чаще всего беру frontend: экраны, состояние, интеграции с API и аккуратную сборку пользовательских сценариев.",
+  "aboutParagraph2": "Мне близки проекты с инженерной начинкой: realtime chat, сервисы с backend-инфраструктурой, UI-kit и приложения, которые нужно поддерживать не только в демо, но и после первого релиза.",
+  "aboutParagraph3": "Все численные метрики на странице берутся из публичных сетевых API во время запуска. Если источник недоступен, интерфейс показывает это состояние вместо устаревшего хардкода.",
+  "codingProfilesTitle": "Coding profiles",
+  "codingProfilesSubtitle": "Live-метрики из GitHub, Codeforces и LeetCode. Каждая карточка ведет на исходный профиль.",
+  "projectsTitle": "Проекты",
+  "projectsSubtitle": "Карточки сфокусированы на роли, личном стеке, статистике репозитория и коммитах из GitHub API.",
+  "contactsTitle": "Контакты",
+  "contactsSubtitle": "Быстрые ссылки для связи и профилей с исходным кодом.",
+  "footer": "Собрано на Flutter Web, l10n, live API и feature-first архитектуре.",
+  "telegramNote": "Публичный handle",
+  "emailValue": "добавить почту",
+  "emailNote": "Не опубликовано в публичных профилях",
+  "githubContactValue": "github.com/Ars5njo",
+  "githubHeadline": "Arsen Latipov, публичный профиль",
+  "codeforcesHeadline": "{rank}, {organization}",
+  "@codeforcesHeadline": {
+    "placeholders": {
+      "rank": {},
+      "organization": {}
+    }
+  },
+  "leetcodeHeadline": "{count} принятых задач",
+  "@leetcodeHeadline": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "openPlatform": "Открыть {platform}",
+  "@openPlatform": {
+    "placeholders": {
+      "platform": {}
+    }
+  },
+  "repository": "Репозиторий",
+  "notAvailable": "н/д",
+  "notFound": "не найден",
+  "manual": "вручную",
+  "publicRepos": "Публичные repo",
+  "followers": "Followers",
+  "following": "Following",
+  "updated": "Обновлено",
+  "rating": "Рейтинг",
+  "maxRating": "Макс. рейтинг",
+  "rank": "Rank",
+  "contribution": "Contribution",
+  "solved": "Решено",
+  "easy": "Easy",
+  "medium": "Medium",
+  "hard": "Hard",
+  "ranking": "Ranking",
+  "githubRepos": "GitHub repos",
+  "public": "public",
+  "codeforces": "Codeforces",
+  "leetcode": "LeetCode",
+  "city": "Город",
+  "cfProfile": "CF profile",
+  "repoCommits": "Коммиты repo",
+  "myCommits": "Мои коммиты",
+  "languages": "Языки",
+  "topics": "Topics",
+  "stars": "Stars",
+  "publicRepo": "Public repo",
+  "stats": "Stats",
+  "roleMetric": "Роль",
+  "frontend": "frontend",
+  "apiSource": "GitHub API",
+  "githubSearchSource": "GitHub Search API",
+  "repoNotFoundNote": "GitHub Search API не нашел публичный load-balancer репозиторий для этого профиля.",
+  "tiktokDescription": "Offline reader для PDF/TXT книг с RSVP-режимом, bionic text, локальной библиотекой и сохранением прогресса.",
+  "tiktokRole": "Flutter feature work: reading flow, UI states, local data и структура проекта.",
+  "loadBalancerDescription": "Проект про распределение входящего трафика между backend-узлами: алгоритмы балансировки, health checks и устойчивость сервиса.",
+  "loadBalancerRole": "Публичный репозиторий не найден; стек и вклад требуют ручного уточнения.",
+  "vrataDescription": "Distributed room-based messenger с изолированными Kafka topics, persistent history и WebSocket/STOMP realtime delivery.",
+  "vrataRole": "Frontend role: Flutter Web client, feature-first layers, room/chat UI и API integration.",
+  "uiKitDescription": "Miracle Development UI kit: reusable Flutter widgets, themed components, story scenarios и golden-testing workflow.",
+  "uiKitRole": "Core contributor: components, stories, exports, theme support и package maintenance.",
+  "tatarDescription": "Cold shower habit app с Flutter frontend, Go backend, PostgreSQL schema и DevOps automation.",
+  "tatarRole": "Frontend Developer: auth flow, schedule editor, timer, dashboard states и adaptive Flutter screens."
+}

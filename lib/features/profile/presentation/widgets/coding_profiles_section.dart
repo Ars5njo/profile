@@ -5,6 +5,7 @@ import 'package:profile/features/profile/domain/entities/profile_metric.dart';
 import 'package:profile/features/profile/presentation/widgets/external_link_button.dart';
 import 'package:profile/features/profile/presentation/widgets/profile_colors.dart';
 import 'package:profile/features/profile/presentation/widgets/section_shell.dart';
+import 'package:profile/l10n/app_localizations.dart';
 
 class CodingProfilesSection extends StatelessWidget {
   const CodingProfilesSection({required this.profiles, super.key});
@@ -13,17 +14,17 @@ class CodingProfilesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return SectionShell(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionHeader(
-            title: 'Coding profiles',
-            subtitle:
-                'Собранные публичные метрики: GitHub, Codeforces и LeetCode. '
-                'Все карточки ведут на исходные профили.',
+          SectionHeader(
+            title: l10n.codingProfilesTitle,
+            subtitle: l10n.codingProfilesSubtitle,
           ),
-          const SizedBox(height: 28),
+          const SizedBox(height: 30),
           LayoutBuilder(
             builder: (context, constraints) {
               final cardWidth = constraints.maxWidth >= 980
@@ -60,76 +61,74 @@ class _CodingProfileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final accent = accentColor(profile.accent);
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: accentFill(profile.accent),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    profile.platform.characters.take(2).join().toUpperCase(),
-                    style: TextStyle(
-                      color: accent,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
+    final l10n = AppLocalizations.of(context);
+
+    return GlassPanel(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: accentFill(profile.accent),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: accent.withValues(alpha: 0.22)),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        profile.platform,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: AppTheme.ink,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      Text(
-                        profile.handle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: AppTheme.mutedInk,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
+                child: Text(
+                  profile.platform.characters.take(2).join().toUpperCase(),
+                  style: TextStyle(color: accent, fontWeight: FontWeight.w900),
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              profile.headline,
-              style: const TextStyle(
-                color: AppTheme.ink,
-                fontWeight: FontWeight.w700,
               ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      profile.platform,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: AppTheme.ink,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    Text(
+                      profile.handle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: AppTheme.mutedInk,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            profile.headline,
+            style: const TextStyle(
+              color: AppTheme.ink,
+              fontWeight: FontWeight.w800,
             ),
-            const SizedBox(height: 18),
-            _MetricsGrid(metrics: profile.metrics),
-            const SizedBox(height: 18),
-            ExternalLinkButton(
-              label: 'Open ${profile.platform}',
-              url: profile.url,
-              icon: Icons.open_in_new_rounded,
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 18),
+          _MetricsGrid(metrics: profile.metrics),
+          const SizedBox(height: 18),
+          ExternalLinkButton(
+            label: l10n.openPlatform(profile.platform),
+            url: profile.url,
+            icon: Icons.open_in_new_rounded,
+          ),
+        ],
       ),
     );
   }
@@ -151,9 +150,9 @@ class _MetricsGrid extends StatelessWidget {
             width: 120,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: AppTheme.canvas,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppTheme.line),
+                color: AppTheme.canvas.withValues(alpha: 0.72),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.07)),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(12),
@@ -169,7 +168,7 @@ class _MetricsGrid extends StatelessWidget {
                           metric.value,
                           maxLines: 1,
                           style: const TextStyle(
-                            color: AppTheme.ink,
+                            color: AppTheme.primary,
                             fontWeight: FontWeight.w900,
                             fontSize: 18,
                           ),

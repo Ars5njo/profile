@@ -14,8 +14,8 @@ Color accentColor(ProfileAccent accent) {
 
 Color accentFill(ProfileAccent accent) {
   return Color.alphaBlend(
-    accentColor(accent).withValues(alpha: 0.12),
-    AppTheme.surface,
+    accentColor(accent).withValues(alpha: 0.14),
+    AppTheme.surfaceHigh,
   );
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:profile/core/theme/app_theme.dart';
 import 'package:profile/features/profile/domain/entities/developer_profile.dart';
 import 'package:profile/features/profile/presentation/widgets/section_shell.dart';
+import 'package:profile/l10n/app_localizations.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({required this.profile, super.key});
@@ -10,8 +11,9 @@ class AboutSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return SectionShell(
-      backgroundColor: Colors.white,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isWide = constraints.maxWidth >= 820;
@@ -22,11 +24,9 @@ class AboutSection extends StatelessWidget {
             children: [
               SizedBox(
                 width: isWide ? 320 : double.infinity,
-                child: const SectionHeader(
-                  title: 'Обо мне',
-                  subtitle:
-                      'Короткий профиль без лишней витрины: чем занимаюсь, '
-                      'какие задачи беру и как обычно встраиваюсь в проект.',
+                child: SectionHeader(
+                  title: l10n.aboutTitle,
+                  subtitle: l10n.aboutSubtitle,
                 ),
               ),
               SizedBox(width: isWide ? 56 : 0, height: isWide ? 0 : 28),
@@ -55,9 +55,10 @@ class _AboutCopy extends StatelessWidget {
         for (final paragraph in profile.about) ...[
           Text(
             paragraph,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(color: AppTheme.ink, height: 1.62),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: AppTheme.mutedInk,
+              height: 1.62,
+            ),
           ),
           if (paragraph != profile.about.last) const SizedBox(height: 18),
         ],

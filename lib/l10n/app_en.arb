@@ -1,0 +1,114 @@
+{
+  "@@locale": "en",
+  "appTitle": "Arsen Latipov",
+  "navHome": "Home",
+  "navProfiles": "Profiles",
+  "navProjects": "Projects",
+  "navContacts": "Contacts",
+  "contactButton": "Contact",
+  "languageRu": "RU",
+  "languageEn": "EN",
+  "loadingProfile": "Loading live profile metrics",
+  "loadingHint": "Fetching GitHub, Codeforces, LeetCode, and repository commits.",
+  "retry": "Retry",
+  "loadErrorTitle": "Could not load profile",
+  "loadErrorBody": "The page is ready, but one of the network sources failed before the profile was assembled.",
+  "fullName": "Arsen Latipov",
+  "role": "Flutter Developer",
+  "location": "Innopolis, Russia",
+  "ageValue": "19",
+  "ageChip": "Age: {age}",
+  "@ageChip": {
+    "placeholders": {
+      "age": {}
+    }
+  },
+  "summary": "I build Flutter interfaces, web/mobile applications, and like projects where the UI is tied to real architecture: REST, WebSocket, local storage, CI, and a clear feature-first structure.",
+  "publicSnapshot": "Live snapshot: {date}",
+  "@publicSnapshot": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "aboutTitle": "About me",
+  "aboutSubtitle": "A concise developer profile: what I work on, which tasks I usually own, and how I fit into a product team.",
+  "aboutParagraph1": "I study and work around Flutter, Dart, and applied software engineering. In team projects I usually own the frontend: screens, state, API integrations, and polished user flows.",
+  "aboutParagraph2": "I enjoy products with engineering depth: realtime chat, backend-backed services, UI kits, and apps that need to remain maintainable after the first demo.",
+  "aboutParagraph3": "All numeric metrics on this page are fetched from public network APIs at runtime. If a source is unavailable, the interface shows that state instead of using stale hardcoded values.",
+  "codingProfilesTitle": "Coding profiles",
+  "codingProfilesSubtitle": "Live public metrics from GitHub, Codeforces, and LeetCode. Each card links to the original profile.",
+  "projectsTitle": "Projects",
+  "projectsSubtitle": "Project cards focus on role, personal stack, repository stats, and commit counts fetched from GitHub APIs.",
+  "contactsTitle": "Contacts",
+  "contactsSubtitle": "Direct links for messaging and source profiles.",
+  "footer": "Built with Flutter Web, l10n, live APIs, and feature-first architecture.",
+  "telegramNote": "Public handle",
+  "emailValue": "add email",
+  "emailNote": "Not published in public profiles",
+  "githubContactValue": "github.com/Ars5njo",
+  "githubHeadline": "Arsen Latipov, public profile",
+  "codeforcesHeadline": "{rank}, {organization}",
+  "@codeforcesHeadline": {
+    "placeholders": {
+      "rank": {},
+      "organization": {}
+    }
+  },
+  "leetcodeHeadline": "{count} accepted problems",
+  "@leetcodeHeadline": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "openPlatform": "Open {platform}",
+  "@openPlatform": {
+    "placeholders": {
+      "platform": {}
+    }
+  },
+  "repository": "Repository",
+  "notAvailable": "n/a",
+  "notFound": "not found",
+  "manual": "manual",
+  "publicRepos": "Public repos",
+  "followers": "Followers",
+  "following": "Following",
+  "updated": "Updated",
+  "rating": "Rating",
+  "maxRating": "Max rating",
+  "rank": "Rank",
+  "contribution": "Contribution",
+  "solved": "Solved",
+  "easy": "Easy",
+  "medium": "Medium",
+  "hard": "Hard",
+  "ranking": "Ranking",
+  "githubRepos": "GitHub repos",
+  "public": "public",
+  "codeforces": "Codeforces",
+  "leetcode": "LeetCode",
+  "city": "City",
+  "cfProfile": "CF profile",
+  "repoCommits": "Repo commits",
+  "myCommits": "My commits",
+  "languages": "Languages",
+  "topics": "Topics",
+  "stars": "Stars",
+  "publicRepo": "Public repo",
+  "stats": "Stats",
+  "roleMetric": "Role",
+  "frontend": "frontend",
+  "apiSource": "GitHub API",
+  "githubSearchSource": "GitHub Search API",
+  "repoNotFoundNote": "GitHub Search API did not find a public load-balancer repository for this profile.",
+  "tiktokDescription": "Offline reader for PDF/TXT books with RSVP mode, bionic text, local library and progress saving.",
+  "tiktokRole": "Flutter feature work: reading flow, UI states, local data and project structure.",
+  "loadBalancerDescription": "Project about distributing incoming traffic between backend nodes: balancing algorithms, health checks, and service resilience.",
+  "loadBalancerRole": "Public repository was not found; stack and contribution need manual confirmation.",
+  "vrataDescription": "Distributed room-based messenger with isolated Kafka topics, persistent history, and WebSocket/STOMP realtime delivery.",
+  "vrataRole": "Frontend role: Flutter Web client, feature-first layers, room/chat UI, and API integration.",
+  "uiKitDescription": "Miracle Development UI kit: reusable Flutter widgets, themed components, story scenarios, and golden-testing workflow.",
+  "uiKitRole": "Core contributor: components, stories, exports, theme support, and package maintenance.",
+  "tatarDescription": "Cold shower habit app with Flutter frontend, Go backend, PostgreSQL schema, and DevOps automation.",
+  "tatarRole": "Frontend Developer: auth flow, schedule editor, timer, dashboard states, and adaptive Flutter screens."
+}

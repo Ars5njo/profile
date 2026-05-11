@@ -4,6 +4,7 @@ import 'package:profile/features/profile/domain/entities/contact_link.dart';
 import 'package:profile/features/profile/presentation/widgets/external_link_button.dart';
 import 'package:profile/features/profile/presentation/widgets/profile_colors.dart';
 import 'package:profile/features/profile/presentation/widgets/section_shell.dart';
+import 'package:profile/l10n/app_localizations.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({required this.contacts, super.key});
@@ -12,15 +13,15 @@ class ContactSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return SectionShell(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionHeader(
-            title: 'Контакты',
-            subtitle:
-                'Быстрые ссылки для связи и профилей. Непубличные значения '
-                'оставлены отдельной строкой, чтобы их было легко заменить.',
+          SectionHeader(
+            title: l10n.contactsTitle,
+            subtitle: l10n.contactsSubtitle,
           ),
           const SizedBox(height: 24),
           LayoutBuilder(
@@ -55,52 +56,52 @@ class _ContactCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(contactIcon(contact.icon), color: AppTheme.teal),
-            const SizedBox(height: 14),
-            Text(
-              contact.label,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: AppTheme.ink,
-                fontWeight: FontWeight.w800,
-              ),
+    final l10n = AppLocalizations.of(context);
+
+    return GlassPanel(
+      padding: const EdgeInsets.all(18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(contactIcon(contact.icon), color: AppTheme.primary),
+          const SizedBox(height: 14),
+          Text(
+            contact.label,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: AppTheme.ink,
+              fontWeight: FontWeight.w900,
             ),
-            const SizedBox(height: 6),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            contact.value,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: AppTheme.mutedInk,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          if (contact.note case final note?) ...[
+            const SizedBox(height: 8),
             Text(
-              contact.value,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+              note,
               style: const TextStyle(
-                color: AppTheme.mutedInk,
-                fontWeight: FontWeight.w700,
+                color: AppTheme.faintInk,
+                fontSize: 12,
+                height: 1.35,
               ),
             ),
-            if (contact.note case final note?) ...[
-              const SizedBox(height: 8),
-              Text(
-                note,
-                style: const TextStyle(
-                  color: AppTheme.mutedInk,
-                  fontSize: 12,
-                  height: 1.35,
-                ),
-              ),
-            ],
-            if (contact.isAvailable) ...[
-              const SizedBox(height: 16),
-              ExternalLinkButton(
-                label: 'Open',
-                url: contact.url!,
-                icon: Icons.open_in_new_rounded,
-              ),
-            ],
           ],
-        ),
+          if (contact.isAvailable) ...[
+            const SizedBox(height: 16),
+            ExternalLinkButton(
+              label: l10n.openPlatform(contact.label),
+              url: contact.url!,
+              icon: Icons.open_in_new_rounded,
+            ),
+          ],
+        ],
       ),
     );
   }

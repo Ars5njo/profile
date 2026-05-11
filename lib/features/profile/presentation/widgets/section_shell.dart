@@ -5,7 +5,7 @@ class SectionShell extends StatelessWidget {
   const SectionShell({
     required this.child,
     this.backgroundColor,
-    this.padding = const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+    this.padding = const EdgeInsets.symmetric(horizontal: 24, vertical: 56),
     super.key,
   });
 
@@ -19,7 +19,7 @@ class SectionShell extends StatelessWidget {
       color: backgroundColor ?? Colors.transparent,
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 900),
+          constraints: const BoxConstraints(maxWidth: 1120),
           child: Padding(padding: padding, child: child),
         ),
       ),
@@ -38,27 +38,43 @@ class SectionHeader extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 740),
+      constraints: const BoxConstraints(maxWidth: 760),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
             style: textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w900,
               color: AppTheme.ink,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            subtitle,
-            style: textTheme.bodyLarge?.copyWith(
-              color: AppTheme.mutedInk,
-              height: 1.5,
+              height: 1.08,
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class GlassPanel extends StatelessWidget {
+  const GlassPanel({
+    required this.child,
+    this.padding = const EdgeInsets.all(20),
+    super.key,
+  });
+
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.035),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.09)),
+      ),
+      child: Padding(padding: padding, child: child),
     );
   }
 }

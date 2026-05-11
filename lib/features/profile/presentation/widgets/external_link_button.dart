@@ -43,9 +43,7 @@ class ExternalLinkButton extends StatelessWidget {
     );
 
     if (!didLaunch && messenger != null) {
-      messenger.showSnackBar(
-        SnackBar(content: Text('Не получилось открыть $url')),
-      );
+      messenger.showSnackBar(SnackBar(content: Text('Could not open $url')));
     }
   }
 }
