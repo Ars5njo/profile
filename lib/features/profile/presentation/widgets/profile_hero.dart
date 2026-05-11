@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:profile/core/theme/app_theme.dart';
 import 'package:profile/features/profile/domain/entities/developer_profile.dart';
-import 'package:profile/features/profile/domain/entities/profile_metric.dart';
 import 'package:profile/features/profile/presentation/widgets/external_link_button.dart';
 import 'package:profile/features/profile/presentation/widgets/profile_colors.dart';
 import 'package:profile/features/profile/presentation/widgets/section_shell.dart';
@@ -216,61 +215,6 @@ class _InfoChip extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _HeroMetric extends StatelessWidget {
-  const _HeroMetric({required this.metric});
-
-  final ProfileMetric metric;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 132,
-      child: GlassPanel(
-        padding: const EdgeInsets.all(15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 34,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  metric.value,
-                  maxLines: 1,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: AppTheme.primary,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              metric.label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: AppTheme.ink,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            if (metric.caption case final caption?) ...[
-              const SizedBox(height: 2),
-              Text(
-                caption,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: AppTheme.faintInk, fontSize: 12),
-              ),
-            ],
-          ],
-        ),
       ),
     );
   }
